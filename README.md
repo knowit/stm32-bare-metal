@@ -18,7 +18,7 @@ Mer informasjon om utviklingskortet kan du finne [her](https://www.st.com/resour
 ## Forkunnskaper
 Fokuset for kurset er å få opp et miljø for utvikling og debugging. Eksemplene som vi vil gå igjennom begynner med en enkel blinky applikasjon og påfølgende moduler vil øke i kompleksitet slik at man til slutt sitter igjen med en applikasjon som kan spille av rtttl sanger, dvs enkle sanger med et format som ble mye brukt på gamle Nokia mobil telefoner.  
 
-Det forventes at du kan grunnleggende C programming og en overflatisk forståelse av hva en microcontroller er.  Dvs at en microcontroller er en liten datamaskin integrert i en chip som inneholder alle komponenter(cpu, program minne, data minne og perifere io kretser) en trenger for å lagre og kjøre programmer og kommunisere med omverdenen.
+Det forventes at du kan grunnleggende C programming og en overflatisk forståelse av hva en microcontroller er.
 
 ## Innhold
 
