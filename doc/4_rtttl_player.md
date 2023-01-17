@@ -12,7 +12,16 @@ Let's get going!
 ## Hardware Setup
 Koble Nucleo kortet til din pc med medfølgende USB kabel. Koble utviklingskortet til piezo elementet med den 3 tråds ledningen som anvist på tegningen under.
 
-![Piezo Hook up](./piezo_hookup.jpg)
+![Piezo Hook Up Overview](./piezo_overview.jpg)
+
+![Piezo Hook up Closeup](./piezo_closeup.jpg)
+
+### Koblingstabell
+| Pinne, Utviklerkort | Pinne, Piezo | Signal |
+|---------------------|--------------|--------|
+|          20         |      GND     |   GND  |
+|          16         |      VCC     |  3.3V  |
+|          1          |      I/O     |   I/O  |
 
 ## Lage Et Nytt Prosjekt
 - Åpne opp STM32CubeIDE
