@@ -5,15 +5,17 @@ I denne leksjonen skal du lære hvordan du kan lage en artig [RTTTL](https://en.
 
 Vi skal benytte oss av 3 RTOS tasks(oppgaver).  Vi skal gjenbruke oppgavene fra forrige øvelse, dvs knapp og led oppgavene.  Den tredje oppgaven skal vi lage nå og den vil spille en sang ved å sette forskjellige telle verdier på en timer.  Utgangen på timeren vil generere firkantpulser med varierende duty cycle som vil generere forskjellige toner på piezo elementet som vi kobler til.  Gøy!
 
-Et vanlig oppsett når man utvikler i RTOS er at hver task har sin egen input queue som de titter på for nye ting oppgaven skal gjøre.  I denne oppgaven så følger vi dette med at led og player taskene har hver sin queue, hvor button task vil legge til meldinger i disse for hver knappetrykk.
+Et vanlig oppsett når man utvikler i RTOS er at hver task har sin egen input queue som de titter på for nye ting oppgaven skal gjøre.  I denne oppgaven så følger vi dette med at led og player taskene har hver sin queue, hvor button task vil legge til meldinger i disse for hvert knappetrykk.
 
 Let's get going!
 
 ## Hardware Setup
-Koble Nucleo kortet til din pc med medfølgende USB kabel. Koble utviklingskortet til piezo elementet med den 3 tråds ledningen som anvist på tegningen under.
+Koble Nucleo kortet til din pc med medfølgende USB kabel. Koble utviklingskortet til piezo elementet med den 3 tråds ledningen som anvist på tegningene under.
 
+Overview
 ![Piezo Hook Up Overview](./piezo_overview.jpg)
 
+Closeup
 ![Piezo Hook up Closeup](./piezo_closeup.jpg)
 
 ### Koblingstabell
@@ -45,12 +47,12 @@ Koble Nucleo kortet til din pc med medfølgende USB kabel. Koble utviklingskorte
 
 ![RTOS Config Player](./sys_setup_rtos_player.jpg)
 
-- Vi må øke heap konfigurasjonen til FreeRTOS, dette gjøres ved å velge 
 - Under ```Project Explorer``` på venstre siden, ekspander ```Core``` folderen og så ```Src``` folderen. Du vil nå finne ```main.c``` filen, dobbelklikk på denne. IDEen vil nok spørre om du vil generere kode først, si ja til dette.
 - Sjekk at prosjektet kompilerer ved å velge meny tittelen ```Project``` og så videre ```Build All```.
 - Hvis det går bra, så er du klar til å legge til litt mere kode!  Finn følgende seksjoner under i ```main.c``` filen og kopier inn kode som spesifisert.
 
 ```/* USER CODE BEGIN Includes */```
+
 Legg til følgende kode:
 ```cpp
 ...
@@ -60,6 +62,7 @@ Legg til følgende kode:
 ```
 
 ```/* USER CODE BEGIN PD */```
+
 Legg til følgende kode:
 ```cpp
 ...
@@ -70,6 +73,7 @@ Legg til følgende kode:
 ```
 
 ```/* USER CODE BEGIN PV */```
+
 Legg til følgende kode:
 ```cpp
 ...
@@ -92,7 +96,7 @@ st_rtttl_t rtttl_info;
 //const unsigned char melody[] = "Bond:d=4,o=5,b=80:32p,16c#6,32d#6,32d#6,16d#6,8d#6,16c#6,16c#6,16c#6,16c#6,32e6,32e6,16e6,8e6,16d#6,16d#6,16d#6,16c#6,32d#6,32d#6,16d#6,8d#6,16c#6,16c#6,16c#6,16c#6,32e6,32e6,16e6,8e6,16d#6,16d6,16c#6,16c#7,c.7,16g#6,16f#6,g#.6";
 //const unsigned char melody[] = "MASH:d=8,o=5,b=140:4a,4g,f#,g,p,f#,p,g,p,f#,p,2e.,p,f#,e,4f#,e,f#,p,e,p,4d.,p,f#,4e,d,e,p,d,p,e,p,d,p,2c#.,p,d,c#,4d,c#,d,p,e,p,4f#,p,a,p,4b,a,b,p,a,p,b,p,2a.,4p,a,b,a,4b,a,b,p,2a.,a,4f#,a,b,p,d6,p,4e.6,d6,b,p,a,p,2b";
 const unsigned char melody[] =
-		"StarWars:d=4,o=5,b=45:32p,32f#,32f#,32f#,8b.,8f#.6,32e6,32d#6,32c#6,8b.6,16f#.6,32e6,32d#6,32c#6,8b.6,16f#.6,32e6,32d#6,32e6,8c#.6,32f#,32f#,32f#,8b.,8f#.6,32e6,32d#6,32c#6,8b.6,16f#.6,32e6,32d#6,32c#6,8b.6,16f#.6,32e6,32d#6,32e6,8c#6";
+    "StarWars:d=4,o=5,b=45:32p,32f#,32f#,32f#,8b.,8f#.6,32e6,32d#6,32c#6,8b.6,16f#.6,32e6,32d#6,32c#6,8b.6,16f#.6,32e6,32d#6,32e6,8c#.6,32f#,32f#,32f#,8b.,8f#.6,32e6,32d#6,32c#6,8b.6,16f#.6,32e6,32d#6,32c#6,8b.6,16f#.6,32e6,32d#6,32e6,8c#6";
 //const unsigned char melody[] = "GoodBad:d=4,o=5,b=56:32p,32a#,32d#6,32a#,32d#6,8a#.,16f#.,16g#.,d#,32a#,32d#6,32a#,32d#6,8a#.,16f#.,16g#.,c#6,32a#,32d#6,32a#,32d#6,8a#.,16f#.,32f.,32d#.,c#,32a#,32d#6,32a#,32d#6,8a#.,16g#.,d#";
 //const unsigned char melody[] = "TopGun:d=4,o=4,b=31:32p,16c#,16g#,16g#,32f#,32f,32f#,32f,16d#,16d#,32c#,32d#,16f,32d#,32f,16f#,32f,32c#,16f,d#,16c#,16g#,16g#,32f#,32f,32f#,32f,16d#,16d#,32c#,32d#,16f,32d#,32f,16f#,32f,32c#,g#";
 //const unsigned char melody[] = "A-Team:d=8,o=5,b=125:4d#6,a#,2d#6,16p,g#,4a#,4d#.,p,16g,16a#,d#6,a#,f6,2d#6,16p,c#.6,16c6,16a#,g#.,2a#";
@@ -109,112 +113,125 @@ const unsigned char melody[] =
 ```
 Du må gjerne velge din egen sang ved å kommentere ut linjen som er valgt og fjerne kommentar tegnene på en sang du ønsker.
 
-```vButtonTask```
+```int main(void)```
+
 Legg til følgende kode:
+```cpp
+...
+/* USER CODE BEGIN 2 */
+rtttl_info.tim_ref = &htim1;
+rtttl_info.tim_channel = TIM_CHANNEL_3;
+/* USER CODE END 2 */
+
+```
+
+```vButtonTask```
+
+Legg til følgende kode:
+
 ```cpp
 ...
 /* USER CODE END Header_vButtonTask */
 void vButtonTask(void const *argument) {
-	/* USER CODE BEGIN vButtonTask */
-	uint8_t curr_data = 0;
-	uint8_t prev_data = 0;
+  /* USER CODE BEGIN vButtonTask */
+  uint8_t curr_data = 0;
+  uint8_t prev_data = 0;
 
-	/* Infinite loop */
-	for (;;) {
-		osDelay(100);
-		curr_data = HAL_GPIO_ReadPin(USR_BTN_GPIO_Port, USR_BTN_Pin);
+  /* Infinite loop */
+  for (;;) {
+    osDelay(100);
+    curr_data = HAL_GPIO_ReadPin(USR_BTN_GPIO_Port, USR_BTN_Pin);
 
-		if (curr_data == GPIO_PIN_RESET && prev_data == GPIO_PIN_SET) {
-			osMessagePut(myLedEventQueueHandle, (uint32_t) BUTTON_PUSH_EVENT, 0);
-			osMessagePut(myPlayerEventQueueHandle, (uint32_t) BUTTON_PUSH_EVENT, 0);
-		}
+    if (curr_data == GPIO_PIN_RESET && prev_data == GPIO_PIN_SET) {
+      osMessagePut(myLedEventQueueHandle, (uint32_t) BUTTON_PUSH_EVENT, 0);
+      osMessagePut(myPlayerEventQueueHandle, (uint32_t) BUTTON_PUSH_EVENT, 0);
+    }
 
-		if (curr_data == GPIO_PIN_SET && prev_data == GPIO_PIN_RESET) {
-			osMessagePut(myLedEventQueueHandle, (uint32_t) BUTTON_RELEASE_EVENT, 0);
-		}
+    if (curr_data == GPIO_PIN_SET && prev_data == GPIO_PIN_RESET) {
+      osMessagePut(myLedEventQueueHandle, (uint32_t) BUTTON_RELEASE_EVENT, 0);
+    }
 
-		prev_data = curr_data;
-	}
-	/* USER CODE END vButtonTask */
+    prev_data = curr_data;
+  }
+  /* USER CODE END vButtonTask */
 }
 ```
 
 ```vLedTask```
+
 Legg til følgende kode:
 ```cpp
 ...
 /* USER CODE END Header_vLedTask */
 void vLedTask(void const *argument) {
-	/* USER CODE BEGIN vLedTask */
-	osEvent event;
-	uint8_t curr_data = 0;
+  /* USER CODE BEGIN vLedTask */
+  osEvent event;
+  uint8_t curr_data = 0;
 
-	/* Infinite loop */
-	for (;;) {
-		osDelay(100);
+  /* Infinite loop */
+  for (;;) {
+    /*wait until kernel message*/
+    event = osMessageGet(myLedEventQueueHandle, 10);
 
-		/*wait until kernel message*/
-		event = osMessageGet(myLedEventQueueHandle, osWaitForever);
+    /*if we are here, then receive message*/
+    if (event.status == osEventMessage) {
+      // get value
+      curr_data = (uint8_t) event.value.v;
 
-		/*if we are here, then receive message*/
-		if (event.status == osEventMessage) {
-			// get value
-			curr_data = (uint8_t) event.value.v;
+      if (curr_data == BUTTON_PUSH_EVENT)
+        HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
 
-			if (curr_data == BUTTON_PUSH_EVENT)
-				HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
-
-			if (curr_data == BUTTON_RELEASE_EVENT)
-				HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
-		}
-	}
-	/* USER CODE END vLedTask */
+      if (curr_data == BUTTON_RELEASE_EVENT)
+        HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
+    }
+  }
+  /* USER CODE END vLedTask */
 }
 ```
 
 ```vPlayerTask```
+
 Legg til følgende kode:
 ```cpp
 ...
 /* USER CODE END Header_vPlayerTask */
 void vPlayerTask(void const *argument) {
-	/* USER CODE BEGIN vPlayerTask */
-	osEvent event;
-	uint8_t curr_data = 0;
+  /* USER CODE BEGIN vPlayerTask */
+  osEvent event;
+  uint8_t curr_data = 0;
 
-	/* Infinite loop */
-	for (;;) {
-		osDelay(10);
+  /* Infinite loop */
+  for (;;) {
 
-		/*wait until kernel message*/
-		event = osMessageGet(myPlayerEventQueueHandle, 50);
+    /*wait until kernel message*/
+    event = osMessageGet(myPlayerEventQueueHandle, 10);
 
-		/*if we are here, then receive message*/
-		if (event.status == osEventMessage) {
-			// get value
-			curr_data = (uint8_t) event.value.v;
+    /*if we are here, then receive message*/
+    if (event.status == osEventMessage) {
+      // get value
+      curr_data = (uint8_t) event.value.v;
 
-			if (curr_data == BUTTON_PUSH_EVENT) {
-				if (rtttl_info.playing) {
-					rtttl_stop(&rtttl_info);
-				} else {
-					rtttl_info.tune_data = &melody[0];
-					rtttl_start(&rtttl_info);
-				}
-			}
-		} else {
-			// no new queue message received, keep playing if player is enabled
-			rtttl_play(&rtttl_info);
-		}
+      if (curr_data == BUTTON_PUSH_EVENT) {
+        if (rtttl_info.playing) {
+          rtttl_stop(&rtttl_info);
+        } else {
+          rtttl_info.tune_data = &melody[0];
+          rtttl_start(&rtttl_info);
+        }
+      }
+    } else {
+      // no new queue message received, keep playing if player is enabled
+      rtttl_play(&rtttl_info);
+    }
 
-	}
-	/* USER CODE END vPlayerTask */
+  }
+  /* USER CODE END vPlayerTask */
 }
 ```
 
-- Nå må du legge til en kilde fil med navn [rtttl.c](doc/rtttl.c) og tilhørende include fil [rtttl.h](doc/rtttl.h).  Dette kan gjøres ved å lage nye filer i ```Src``` og ```Inc``` folderne under ```Core``` under prosjektnavigatøren på venstre side og så kopiere inn kildekoden fra filene i lenkene. Husk at ```rtttl.c``` skal i ```Src``` folderen og ```rtttl.h``` skal i ```Inc``` folderen.
+- Nå må du legge til en kilde fil med navn [rtttl.c](/doc/rtttl.c) og tilhørende include fil [rtttl.h](/doc/rtttl.h).  Dette kan gjøres ved å lage nye filer i ```Src``` og ```Inc``` folderne under ```Core``` under prosjektnavigatøren på venstre side og så kopiere inn kildekoden fra filene i lenkene. Husk at ```rtttl.c``` skal i ```Src``` folderen og ```rtttl.h``` skal i ```Inc``` folderen.
 - Sjekk at prosjektet kompilerer ved å velge meny tittelen ```Project``` og så videre ```Build All```.
 - Hvis alt er ok, så kan du nå velge meny tittelen ```Run``` og så videre ```Run```. En pop up kan dukke opp med valg av debug konfigurasjon, aksepter defaults og gå videre.
-- I noen tilfeller så vil miljøet spørre om du ønsker å oppdatere firmware på debuggeren som sitter på utviklingskortet, si ja til dette.
-- Når prosessen er ferdig, så lastes din kode opp til kortet.  Du vil nå se at LED4 på kortet blinke av og på avhengig av når du trykker inn eller slipper knappen. Du vil også høre en sang spille hvis alt er riktig kodet og koblet opp! Ved å trykke inn knappen igjen, så vil avspillingen avsluttes. 
+- I noen tilfeller så vil miljøet spørre om du ønsker å oppdatere firmware på debuggeren som sitter på utviklingskortet. Si ja til dette.
+- Når prosessen er ferdig, så lastes din kode opp til kortet.  Du vil nå se at LD4/LED GREEN på kortet blinke av og på avhengig av når du trykker inn eller slipper knappen. Du vil også høre en sang spille hvis alt er riktig kodet og koblet opp! Ved å trykke inn knappen igjen, så vil avspillingen avsluttes. 
 - Gratulerer, du har nå laget et enkelt prosjekt med et sanntids operativ system for en STM32 mikrokontroller som spiller musikk!

@@ -4,7 +4,7 @@ A repo which contains the material for a bare metal programming workshop on stm3
 # STM32 Bare Metal Programmering med STM32CubeIDE
 
 ## Om kurset
-Dette kurset er ment som en introduksjon til STM32 ARM baserte microcontrollere og hvordan man kan gjøre utvikling på disse ved å bruke STM32CubeIDE miljøet. Dette er et mer proffesjonelt miljø enn for eksempel Arduino og man har tilgang til full hardware debugging med tracing og breakpoints.
+Dette kurset er ment som en introduksjon til STM32 ARM baserte microcontrollere og hvordan man kan gjøre utvikling på disse ved å bruke STM32CubeIDE miljøet. Dette er et mer proffesjonelt miljø enn for eksempel Arduino og man har tilgang til full hardware debugging med tracing og breakpoints. En av de fine fordelene med dette miljøet er at den har et grafisk konfigurasjons grensesnitt som gjør det enkelt å sette opp hardware ressursene visuelt og så lage all nødvendig skjelett kode som kan brukes direkte i kode prosjektet ditt.
 
 ## Utstyr
 For å delta trenger du en datamaskin med en USB-A-kontakt. Kurset har blitt testet på Windows/macOS, men skal i teorien fungere på alle operativsystemer.
@@ -24,7 +24,7 @@ Det forventes at du kan grunnleggende C programming og en overflatisk forståels
 
 ### Setup
 1. Installasjon av STM32CubeIDE
-Gå til [ST's webside](https://www.st.com/en/development-tools/stm32cubeide.html#get-software) og last ned installasjonsfilen for IDE.  Velg installasjons fil basert på ditt OS miljø. Du må mest sannsynligvis lage en profil for å få tilgang til installasjonsfilen.
+Gå til [ST's webside](https://www.st.com/en/development-tools/stm32cubeide.html#get-software) og last ned installasjonsfilen for IDE.  Velg installasjonsfil basert på ditt OS miljø. Du må mest sannsynligvis lage en profil for å få tilgang til installasjonsfilen.
 
 2. Installasjon av en serie terminal klient
 [CoolTerm](http://freeware.the-meiers.org/) er en enkel klient som er tilgjengelig for de fleste platformer og støtter bruk av makroer.  Last ned og installer.

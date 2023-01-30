@@ -9,7 +9,7 @@ Rammeverket har også verktøy som meldingskøer for å få oppgavene til å kom
 
 Mye spennende å lære om dette og en god referanse er å finne [her](http://www.disca.upv.es/aperles/arm_cortex_m3/curset/CMSIS/Documentation/RTOS/html/index.html).
 
-Vi skal lage 2 oppgaver(en button reader og en led blinker) og disse skal kommunisere med hverandre via en meldingskø. Button oppgaven skal gi beskjed til køen om når den oppdager en knapp-ned eller en knapp-opp event.  Led oppgaven skal ved knapp-ned event(1) skru på den grønne lysdioden og ved knapp-opp event(2) skru den av igjen.  
+Vi skal lage 2 oppgaver(en knapp/button reader og en led blinker) og disse skal kommunisere med hverandre via en meldingskø. Button oppgaven skal gi beskjed til køen om når den oppdager en knapp-ned eller en knapp-opp event.  LED oppgaven skal ved knapp-ned event(definert med en '1') skru på den grønne lysdioden og ved knapp-opp event(definert med en '2') skru den av igjen.  
 
 Let's get going!
 
@@ -19,14 +19,14 @@ Koble Nucleo kortet til din pc med medfølgende USB kabel. På kortet er en grø
 ## Lage Et Nytt Prosjekt
 - Åpne opp STM32CubeIDE
 - Velg ```Start new STM32 project```
-- Du vil nå bli presentert med STM32CubeIDE sin hardware picker. Her kan man velge konfigurasjon basert på microcontroller eller utviklingskort.
+- Du vil nå bli presentert med STM32CubeIDE sin hardware velger. Her kan man velge konfigurasjon basert på microcontroller eller utviklingskort.
 - Trykk på ```Board Selector``` tabben og tast in ```NUCLEO-G0B1RE``` under ```Commercial Part Number```.
 - Under Boards List, så vil vårt utviklingskort dukke opp.  Velg dette og trykk ```Next``` knappen.
 - Du vil nå få et vindu opp med ønsket project parametere.  Skriv inn ```blinky_rtos``` som projekt navn og la resten være med defaults. Trykk ```Finish``` knappen.
 - STM32CubeIDE vil nå laste ned nødvendige filer og lage prosjektet ditt.
 - I IDEen, så vil du bli presentert med en grafisk representasjon av blinky_rtos.ios filen, som er filen man spesifiserer microcontrollerens hardware ressurser man ønsker å bruke i prosjektet. Siden vi har valgt et allerede kjent utviklingskort, så kan man se at pinnene på mikrokontrolleren er allerede satt opp.
-- Legg merke til pinne PA5, som har fått et alias navn ```LED_GREEN```. Denne skal vi bruke til LED tasken vår.
-- Legg merke til pinne PC13, som har fått et alias navn ```USR_BTN```.  Denne skal vi bruke til Button tasken vår.
+- Legg merke til pinne ```PA5```, som har fått et alias navn ```LED_GREEN```. Denne skal vi bruke til LED tasken vår.
+- Legg merke til pinne ```PC13```, som har fått et alias navn ```USR_BTN```.  Denne skal vi bruke til Button tasken vår.
 - Ekspander ```Middleware``` folderen til venstre og velg ```FREERTOS```.
 - I ```FREERTOS Mode and Configuration``` menyen, så velger du ```CMSIS_V1``` i drop-down boksen.
 - Under ```Configuration``` seksjonen, så legger du til 2 tasks med ```Add``` knappen. Egenskapene du skal fylle inn kan du se i skjermbildet under. Lag så en Queue med tilhørende ```Add``` knapp, egenskapene du skal fylle inn ser du i skjermbildet under.
@@ -52,8 +52,8 @@ Legg til følgende kode:
 ```Private Macro```
 ```cpp
 /* USER CODE BEGIN PM */
-#define BUTTON_PUSH_EVENT			1
-#define BUTTON_RELEASE_EVENT		2
+#define BUTTON_PUSH_EVENT 1
+#define BUTTON_RELEASE_EVENT 2
 
 /* USER CODE END PM */
 ```
@@ -66,10 +66,10 @@ void vButtonTask(void const * argument)
 {
   /* USER CODE BEGIN vButtonTask */
   /* Infinite loop */
-	for(;;)
-	{
-		osDelay(100);
-	}
+  for(;;)
+  {
+    osDelay(100);
+  }
   /* USER CODE END vButtonTask */
 }
 ```
@@ -82,23 +82,23 @@ Legg til følgende kode:
 void vButtonTask(void const * argument)
 {
   /* USER CODE BEGIN vButtonTask */
-	uint8_t curr_data = 0;
-	uint8_t prev_data = 0;
+  uint8_t curr_data = 0;
+  uint8_t prev_data = 0;
 
   /* Infinite loop */
-	for(;;)
-	{
-		osDelay(100);
-		curr_data = HAL_GPIO_ReadPin(USR_BTN_GPIO_Port, USR_BTN_Pin);
+  for(;;)
+  {
+    osDelay(100);
+    curr_data = HAL_GPIO_ReadPin(USR_BTN_GPIO_Port, USR_BTN_Pin);
 
-		if (curr_data == GPIO_PIN_RESET && prev_data == GPIO_PIN_SET)
-			osMessagePut(myEventQueueHandle, (uint32_t) BUTTON_PUSH_EVENT, 5);
+    if (curr_data == GPIO_PIN_RESET && prev_data == GPIO_PIN_SET)
+      osMessagePut(myEventQueueHandle, (uint32_t) BUTTON_PUSH_EVENT, 5);
 
-		if (curr_data == GPIO_PIN_SET && prev_data == GPIO_PIN_RESET)
-			osMessagePut(myEventQueueHandle, (uint32_t) BUTTON_RELEASE_EVENT, 5);
+    if (curr_data == GPIO_PIN_SET && prev_data == GPIO_PIN_RESET)
+      osMessagePut(myEventQueueHandle, (uint32_t) BUTTON_RELEASE_EVENT, 5);
 
     prev_data = curr_data;
-	}
+  }
   /* USER CODE END vButtonTask */
 }
 ```
@@ -127,29 +127,27 @@ Legg til følgende kode:
 void vLedTask(void const * argument)
 {
   /* USER CODE BEGIN vLedTask */
-	osEvent event;
-	uint8_t curr_data = 0;
+  osEvent event;
+  uint8_t curr_data = 0;
 
   /* Infinite loop */
   for(;;)
   {
-    osDelay(100);
-
     /*wait until kernel message*/
-		event = osMessageGet(myEventQueueHandle, osWaitForever);
+    event = osMessageGet(myEventQueueHandle, 100);
 
-		/*if we are here, then receive message*/
-		if (event.status == osEventMessage)
-		{
-			// get value
-			curr_data = (uint8_t) event.value.v;
+    /*if we are here, then receive message*/
+    if (event.status == osEventMessage)
+    {
+      // get value
+      curr_data = (uint8_t) event.value.v;
 
-			if (curr_data == BUTTON_PUSH_EVENT)
-				HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
+      if (curr_data == BUTTON_PUSH_EVENT)
+        HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
 
-			if (curr_data == BUTTON_RELEASE_EVENT)
-				HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
-		}
+      if (curr_data == BUTTON_RELEASE_EVENT)
+        HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
+    }
   }
   /* USER CODE END vLedTask */
 }
