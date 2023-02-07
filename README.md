@@ -38,3 +38,4 @@ Du er nå klar til å begynne første leksjon!
 - [2. Blinky](./doc/2_blinky.md)
 - [3. Blinky RTOS](./doc/3_blinky_rtos.md)
 - [4. RTTTL Player](./doc/4_rtttl_player.md)
+- [5. RTTTL Player UART](./doc/5_rtttl_player_uart.md)
