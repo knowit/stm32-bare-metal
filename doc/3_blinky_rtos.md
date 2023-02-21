@@ -5,7 +5,7 @@ I denne leksjonen skal du lære hvordan du kan ta i bruk et sanntids operativ sy
 
 Vår oppgave blir å lage små kodesnutter som fokuserer på hver sin oppgave.  
 
-Rammeverket har også verktøy som meldingskøer for å få oppgavene til å kommunisere med hverandre og også tilgangskontrol som mutexer og sempahorer som hjelper med å sikre dedikert adgang til delte hardware ressurser.  
+Rammeverket har også verktøy som meldingskøer for å få oppgavene til å kommunisere med hverandre og også tilgangskontrol som mutexer og semaphorer som hjelper med å sikre dedikert adgang til delte hardware ressurser.  
 
 Mye spennende å lære om dette og en god referanse er å finne [her](http://www.disca.upv.es/aperles/arm_cortex_m3/curset/CMSIS/Documentation/RTOS/html/index.html).
 
@@ -20,13 +20,14 @@ Koble Nucleo kortet til din pc med medfølgende USB kabel. På kortet er en grø
 - Åpne opp STM32CubeIDE
 - Velg ```Start new STM32 project```
 - Du vil nå bli presentert med STM32CubeIDE sin hardware velger. Her kan man velge konfigurasjon basert på microcontroller eller utviklingskort.
-- Trykk på ```Board Selector``` tabben og tast in ```NUCLEO-G0B1RE``` under ```Commercial Part Number```.
+- Trykk på ```Board Selector``` tabben og tast in ```NUCLEO-G0B1RE``` under ```Commercial Part Number```. ALternativt: Klikk på favorit kortet som du spesifiserte i forrige oppgave!
 - Under Boards List, så vil vårt utviklingskort dukke opp.  Velg dette og trykk ```Next``` knappen.
 - Du vil nå få et vindu opp med ønsket project parametere.  Skriv inn ```blinky_rtos``` som projekt navn og la resten være med defaults. Trykk ```Finish``` knappen.
 - STM32CubeIDE vil nå laste ned nødvendige filer og lage prosjektet ditt.
 - I IDEen, så vil du bli presentert med en grafisk representasjon av blinky_rtos.ios filen, som er filen man spesifiserer microcontrollerens hardware ressurser man ønsker å bruke i prosjektet. Siden vi har valgt et allerede kjent utviklingskort, så kan man se at pinnene på mikrokontrolleren er allerede satt opp.
 - Legg merke til pinne ```PA5```, som har fått et alias navn ```LED_GREEN```. Denne skal vi bruke til LED tasken vår.
-- Legg merke til pinne ```PC13```, som har fått et alias navn ```USR_BTN```.  Denne skal vi bruke til Button tasken vår.
+- Legg merke til pinne ```PC13```, som har fått et alias navn ```SYS_WKUP2```.  Denne skal vi bruke til Button tasken vår. Venstre klikk på denne pinnen og velg så ```GPIO_Input```. Høyre klikk på denne pinnen og velg ```Enter User Label``` og skriv så ```USR_BTN```. MERK: Tidligere versjoner av STM32Cube SDK har definert denne pinnen som ```USR_BTN``` fra før, så bare dobbelsjekk at den er definert som en ```GPIO_Input```.
+- Ekspander ```System Core``` og underkategorien ```GPIO```. Klikk på ```PC13``` og velg ```pull-up``` under ```Confguration```.
 - Ekspander ```Middleware``` folderen til venstre og velg ```FREERTOS```.
 - I ```FREERTOS Mode and Configuration``` menyen, så velger du ```CMSIS_V1``` i drop-down boksen.
 - Under ```Configuration``` seksjonen, så legger du til 2 tasks med ```Add``` knappen. Egenskapene du skal fylle inn kan du se i skjermbildet under. Lag så en Queue med tilhørende ```Add``` knapp, egenskapene du skal fylle inn ser du i skjermbildet under.
@@ -37,7 +38,7 @@ Koble Nucleo kortet til din pc med medfølgende USB kabel. På kortet er en grø
 
 ![Time Base Setup](./sys_setup_rtos.jpg)
 
-- Under ```Project Explorer``` på venstre siden, ekspander ```Core``` folderen og så ```Src``` folderen. Du vil nå finne ```main.c``` filen, dobbelklikk på denne.
+- Under ```Project Explorer``` på venstre siden, ekspander ```Core``` folderen og så ```Src``` folderen. Du vil nå finne ```main.c``` filen, dobbelklikk på denne. Det er mulig du får en advarsel om ```USE_NEWLIB_REENTRANT```, ignorer denne for denne øvelsen.
 - Sjekk at prosjektet kompilerer ved å velge meny tittelen ```Project``` og så videre ```Build All```.
 - Hvis det går bra, så er du klar til å legge til litt kode!  Finn følgende seksjoner under i ```main.c``` filen og kopier inn kode som spesifisert.
 

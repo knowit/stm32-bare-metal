@@ -27,6 +27,6 @@ LL(Low Level Libraries) bilbiotekene består av funksjoner som gir et veldig lav
 ### Code Sections
 CubeIDE kode generatoren lager vanligvis et prosjekt som er klar til å kompileres for din valgte microcontroller. Man står fritt til å endre hardware konfigurasjonen underveis mens man utvikler koden, men det er noen 'spilleregler' man må følge for at software og hardware endringer ikke gjør slik at kodegeneratoren sletter din applikasjonkode.
 
-I ```main.c``` filen, så ser man tydelige ```/* USER CODE BEGIN xxx */``` og ```  /* USER CODE END xxx */``` seksjoner hvor man kan putte inn sin egen applikasjonskode som ikke vil gå i beina på kodegeneratoren. Det anbefales sterkt at man holder sin kode innenfor disse og at man bruker disse forhåndsdefinerte områdene i ```main.c.``` og ```main.h```.  
+I ```main.c``` filen, så ser man tydelige ```/* USER CODE BEGIN xxx */``` og ```  /* USER CODE END xxx */``` seksjoner hvor man kan putte inn sin egen applikasjonskode som ikke vil gå i beina på kodegeneratoren. Det anbefales sterkt at man holder sin kode innenfor disse feltene og at man bruker disse forhåndsdefinerte områdene i ```main.c.``` og ```main.h```. Ellers vil kodegeneratoren slette koden din!  
 
 Egen definerte kode filer vil kode generatoren holdes seg unna.

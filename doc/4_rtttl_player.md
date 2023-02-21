@@ -43,7 +43,7 @@ Closeup
 
 ![RTOS Config Heap](./sys_setup_rtos_player_heap.jpg)
 
-- Under ```Configuration``` seksjonen, så legger du til en ```Task``` med ```Add``` knappen i tillegg til de andre taskene vi definerte i forrige oppgave. Egenskapene du skal fylle inn kan du se i skjermbildet under. Lag så en ```Queue``` med tilhørende ```Add``` knapp, egenskapene du skal fylle inn ser du i skjermbildet under.
+- Under ```Configuration``` seksjonen, så legger du til en ```Task``` med ```Add``` knappen i tillegg til de andre taskene vi definerte i forrige oppgave. Egenskapene du skal fylle inn kan du se i skjermbildet under. Lag så en ```Queue``` med tilhørende ```Add``` knapp, egenskapene du skal fylle inn ser du i skjermbildet under. Påse at kø og oppgavene navnene samsvarer med skjermbildet!
 
 ![RTOS Config Player](./sys_setup_rtos_player.jpg)
 

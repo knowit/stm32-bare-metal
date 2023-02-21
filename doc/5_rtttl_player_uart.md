@@ -3,9 +3,9 @@
 ## Oversikt
 I denne leksjonen skal du lære hvordan du kan lage en artig [RTTTL](https://en.wikipedia.org/wiki/Ring_Tone_Text_Transfer_Language) player ved å bruke alt du har lært i de tidligere leksjonene pluss en del nytt vi skal gå igjennom i denne leksjonen. 
 
-Vi skal benytte oss av 4 RTOS tasks(oppgaver).  Vi skal gjenbruke oppgavene fra forrige øvelse, dvs knapp, led og player oppgavene.  Den fjerde oppgaven skal vi lage nå og den vil behandle data mikrokontrolleren mottar fra en serie port, også kalt en UART port.  På utviklerkortet så er denne koblet til en oversetter chip som gjør om disse signalene til en USB port som pcen vil oppdage. Vi skal da gjøre det slik at musikk spilleren kan også spille av sanger som mottas over serie porten.  Vi skal sette opp microcontrolleren slik at en interrupt(et varsel) vil avfyres når den mottar data på sin serie port.  Dette varselet fungerer slik at den vil da få mikrokontrolleren til å stoppe det den holder på med og kjøre en spesiell funsksjon som heter en interrupt handler, eller en varsels håndteringsfunksjon. Denne vil fungere uavhenging av RTOS status, så man trenger noen kjøreregler for når data skal deles mellom varslingshåndteringskoden og resten av systemet. Kode som trigges av et varsel kan startes i gang når som helst.
+Vi skal benytte oss av 4 RTOS tasks(oppgaver).  Vi skal gjenbruke oppgavene fra forrige øvelse, dvs knapp, led og player oppgavene.  Den fjerde oppgaven skal vi lage nå og den vil behandle data mikrokontrolleren mottar fra en serie port, også kalt en UART port.  På utviklerkortet så er denne koblet til en oversetter chip som gjør om disse signalene til en USB port som pcen vil oppdage. Vi skal da gjøre det slik at musikk spilleren kan også spille av sanger som mottas over serie porten.  Vi skal sette opp microcontrolleren slik at en interrupt(et varsel) vil avfyres når den mottar data på sin serie port.  Dette varselet fungerer slik at den vil da få mikrokontrolleren til å stoppe det den holder på med og kjøre en spesiell funksjon som heter en interrupt handler, eller en varsels håndteringsfunksjon. Denne vil fungere uavhenging av RTOS status, så man trenger noen kjøreregler for når data skal deles mellom varslingshåndteringskoden og resten av systemet. Kode som trigges av et varsel kan startes i gang når som helst.
 
-I dette eksempelet så definerer vi en variabel som får en ekstra egenskap som heter 'volatile' eller '_IO'.  Dette forteller kompilatoren at denne variabelen brukes av an interrupt kode og må behandles litt spesielt når ting kompileres for å forhindre korrupsjon av denne variabelen. Dette bruker vi som et flagg fra interrupt koden til hovedkoden om at nye data er til stede. Hovedkoden vil nullstille dette flagget når den er ferdig med dataene. Det er helt klart muligheter for litt kappløp i kodestiene her, så her må man se på behovene i applikasjonen og velge riktige løsninger. Ved ren M2M(maskin til maskin) kommunikasjon, så vil nok en DMA basert mekanisme fungere bedre, gitt at en DMA(direct memory access) kontroller vil kunne overføre data direkte fra serieporten og inn til et minneområde uten at mikrokontrolleren trenger å involvere seg.  Man kan da heller ha en interrupt når DMA kretsen har lagret unna nok data. Men dette er noe du oppmuntres til å teste ut selv ved anledning. ;)
+I dette eksempelet så definerer vi en variabel som får en ekstra egenskap som heter 'volatile' eller '_IO'.  Dette forteller kompilatoren at denne variabelen brukes av en interrupt kode segment og må behandles litt spesielt når ting kompileres for å forhindre korrupsjon av denne variabelen. Dette bruker vi som et flagg fra interrupt koden til hovedkoden om at nye data er til stede. Hovedkoden vil nullstille dette flagget når den er ferdig med dataene. Det er helt klart muligheter for litt kappløp i kodestiene her, så her må man se på behovene i applikasjonen og velge riktige løsninger. Ved ren M2M(maskin til maskin) kommunikasjon, så vil nok en DMA basert mekanisme fungere bedre, gitt at en DMA(direct memory access) kontroller vil kunne overføre data direkte fra serieporten og inn til et minneområde uten at mikrokontrolleren trenger å involvere seg.  Man kan da heller ha en interrupt når DMA kretsen har lagret unna nok data. Men dette er noe du oppmuntres til å teste ut/forske på selv ved anledning. ;)
 
 Let's get going!
 
@@ -276,18 +276,18 @@ void vUartRxTask(void const * argument)
 ```
 
 
-
+- Nå må du legge til en kilde fil med navn [rtttl.c](/doc/rtttl.c) og tilhørende include fil [rtttl.h](/doc/rtttl.h).  Dette kan gjøres ved å lage nye filer i ```Src``` og ```Inc``` folderne under ```Core``` under prosjektnavigatøren på venstre side og så kopiere inn kildekoden fra filene i lenkene. Husk at ```rtttl.c``` skal i ```Src``` folderen og ```rtttl.h``` skal i ```Inc``` folderen.
 - Sjekk at prosjektet kompilerer ved å velge meny tittelen ```Project``` og så videre ```Build All```.
 - Hvis alt er ok, så kan du nå velge meny tittelen ```Run``` og så videre ```Run```. En pop up kan dukke opp med valg av debug konfigurasjon, aksepter defaults og gå videre.
 - I noen tilfeller så vil miljøet spørre om du ønsker å oppdatere firmware på debuggeren som sitter på utviklingskortet. Si ja til dette.
 - Når prosessen er ferdig, så lastes din kode opp til kortet.  Du vil nå se at LD4/LED GREEN på kortet blinke av og på avhengig av når du trykker inn eller slipper knappen. Du vil også høre en sang spille hvis alt er riktig kodet og koblet opp! Ved å trykke inn knappen igjen, så vil avspillingen avsluttes.
 - Start opp en serie port terminal, som for eksempel ```Termite``` for Windows eller ```CoolTerm``` for andre platformer.
-- Send over følgende tekst over serieporten, det kan være enklere å skru på makro funksjonen i terminal rpgrammet og programme en F tast til å inneholde denne strengen.
+- Send over følgende tekst over serieporten, det kan være enklere å skru på makro funksjonen i terminal programmet og programmer en F tast til å inneholde denne strengen.
 
 ```
 $TheSimpsons:d=4,o=5,b=160:c.6,e6,f#6,8a6,g.6,e6,c6,8a,8f#,8f#,8f#,2g,8p,8p,8f#,8f#,8f#,8g,a#.,8c6,8c6,8c6,c6\n
 ```
 
-- Det er mulig du må skru på \r og/eller \n terminering i terminal programmet.
+- Det er mulig du må skru på \r og/eller \n terminering i terminal programmet. i 
 - Hvis ting er riktig, så vil du høre sangen du sendte over via USB/UART!
 - Gratulerer, du har nå laget et enkelt prosjekt med et sanntids operativ system for en STM32 mikrokontroller som spiller musikk og som kan også motta kommandoer fra en pc!

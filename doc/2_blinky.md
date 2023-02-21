@@ -13,7 +13,7 @@ Koble Nucleo kortet til din pc med medfølgende USB kabel. På kortet er en grø
 - Velg ```Start new STM32 project```
 - Du vil nå bli presentert med STM32CubeIDE sin hardware picker. Her kan man velge konfigurasjon basert på microcontroller eller utviklingskort.
 - Trykk på ```Board Selector``` tabben og tast in ```NUCLEO-G0B1RE``` under ```Commercial Part Number```.
-- Under Boards List, så vil vårt utviklingskort dukke opp.  Velg dette og trykk ```Next``` knappen.
+- Under Boards List, så vil vårt utviklingskort dukke opp.  Velg dette og trykk ```Next``` knappen. Tips: Legg in dette som et favoritt kort ved å klikke på stjerna når du velger kortet, så blir den lettere å finne neste gang!
 - Du vil nå få et vindu opp med ønsket project parametere.  Skriv inn ```blinky``` som projekt navn og la resten være med defaults. Trykk ```Finish``` knappen.
 - I IDE grensesnittet, så vil du bli presentert med en grafisk representasjon av blinky.ios filen, som er filen man spesifiserer microcontrollerens hardware ressurser man ønsker å bruke i prosjektet. Siden vi har valgt et allerede kjent utviklingskort, så kan man se at pinnene på mikrokontrolleren er allerede satt opp.
 - Legg merke til pinne PA5, som har fått et alias navn ```LED_GREEN```. På kretskortet så har denne designasjonen ```LD4```.   Utforsk gjerne grensesnittet her litt, ekspander for eksempel ```System Core``` seksjonen på venstre og trykk på ```GPIO```.  Da vil du få se ```LED_GREEN``` pinnen definert med sine attributer satt.  Gjør deg kjent med de forskjellige seksjonene.
