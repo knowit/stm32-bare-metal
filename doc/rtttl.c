@@ -158,7 +158,7 @@ void rtttl_play(st_rtttl_t *ds) {
 		ds->index++; // skip comma for next note
 	}
 	// now play the note
-	frequency = note ? notes[(scale - 4) * 12 + note] : 0;
+	frequency = note ? notes[(scale - 4) * 12 + note] : NOTE_C4; // Alt. PAUSE
 	rtttl_play_tone(ds, frequency);
 	ds->delay_cnt = HAL_GetTick() + duration;
 }
