@@ -282,12 +282,12 @@ void vUartRxTask(void const * argument)
 - I noen tilfeller så vil miljøet spørre om du ønsker å oppdatere firmware på debuggeren som sitter på utviklingskortet. Si ja til dette.
 - Når prosessen er ferdig, så lastes din kode opp til kortet.  Du vil nå se at LD4/LED GREEN på kortet blinke av og på avhengig av når du trykker inn eller slipper knappen. Du vil også høre en sang spille hvis alt er riktig kodet og koblet opp! Ved å trykke inn knappen igjen, så vil avspillingen avsluttes.
 - Start opp en serie port terminal, som for eksempel ```Termite``` for Windows eller ```CoolTerm``` for andre platformer.
-- Send over følgende tekst over serieporten, det kan være enklere å skru på makro funksjonen i terminal programmet og programmer en F tast til å inneholde denne strengen.
+- Send over følgende tekst over serieporten, det kan være enklere å skru på makro funksjonen i terminal programmet og programmere en F tast til å inneholde denne strengen.
 
 ```
 $TheSimpsons:d=4,o=5,b=160:c.6,e6,f#6,8a6,g.6,e6,c6,8a,8f#,8f#,8f#,2g,8p,8p,8f#,8f#,8f#,8g,a#.,8c6,8c6,8c6,c6\n
 ```
 
-- Det er mulig du må skru på \r og/eller \n terminering i terminal programmet. i 
+- Det er mulig du må skru på \r og/eller \n terminering i terminal programmet.
 - Hvis ting er riktig, så vil du høre sangen du sendte over via USB/UART!
 - Gratulerer, du har nå laget et enkelt prosjekt med et sanntids operativ system for en STM32 mikrokontroller som spiller musikk og som kan også motta kommandoer fra en pc!

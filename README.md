@@ -24,7 +24,9 @@ Det forventes at du kan grunnleggende C programming og en overflatisk forståels
 
 ### Setup
 1. Installasjon av STM32CubeIDE
-Gå til [ST's webside](https://www.st.com/en/development-tools/stm32cubeide.html#get-software) og last ned installasjonsfilen for IDE.  Velg installasjonsfil basert på ditt OS miljø. Du må mest sannsynligvis lage en profil for å få tilgang til installasjonsfilen.
+Gå til [ST's webside](https://www.st.com/en/development-tools/stm32cubeide.html#get-software) og last ned installasjonsfilen for IDE.  Velg installasjonsfil basert på ditt OS miljø. Du må mest sannsynligvis lage en profil for å få tilgang til installasjonsfilen. Per nå, så finnes det ikke en native STM32CubeMX installasjon for nye Macs med Apple silikon. Så her må man bruke en x86 versjon med Rosetta.
+
+Se [her](https://community.st.com/s/article/how-to-install-stm32cubeide-on-mac-with-m1-core) for litt mere informasjon om hvordan dette kan gjøres.
 
 2. Installasjon av en serie terminal klient
 [CoolTerm](http://freeware.the-meiers.org/) er en enkel klient som er tilgjengelig for de fleste platformer og støtter bruk av makroer.  Last ned og installer.
