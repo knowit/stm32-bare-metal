@@ -9,12 +9,19 @@ Rammeverket har også verktøy som meldingskøer for å få oppgavene til å kom
 
 Mye spennende å lære om dette og en god referanse er å finne [her](http://www.disca.upv.es/aperles/arm_cortex_m3/curset/CMSIS/Documentation/RTOS/html/index.html).
 
-Vi skal lage 2 oppgaver(en knapp/button reader og en led blinker) og disse skal kommunisere med hverandre via en meldingskø. Button oppgaven skal gi beskjed til køen om når den oppdager en knapp-ned eller en knapp-opp event.  LED oppgaven skal ved knapp-ned event(definert med en '1') skru på den grønne lysdioden og ved knapp-opp event(definert med en '2') skru den av igjen.  
+Vi skal lage 2 oppgaver(en knapp/button reader og en led blinker) og disse skal kommunisere med hverandre via en meldingskø. Button oppgaven skal gi beskjed til køen om når den oppdager en knapp-ned eller en knapp-opp event.  LED oppgaven skal ved knapp-ned event(definert med en '1') skru på den blå lysdioden på ekspansjonskortet og ved knapp-opp event(definert med en '2') skru den av igjen.  
 
 Let's get going!
 
 ## Hardware Setup
-Koble Nucleo kortet til din pc med medfølgende USB kabel. På kortet er en grønn LED med designasjon LD4. Denne skal LED task kontrollere.  Det finnes også en trykk knapp med designasjon USER.  Denne skal Button task lese av.
+Påse at utviklingskortet er frakoblet USB. Monter ekspansjonskortet med Knowit logo på toppen av Nucleo utviklingskortet. 
+
+Se under for et bilde av riktig montert ekspansjonskort på utviklingskortet.
+
+![Nucleo med ekspansjon](./montert_ekpansjonskort.jpg)
+
+
+Koble Nucleo kortet til din pc med medfølgende USB kabel. På ekspansjonskortet er en blå LED med designasjon LED(koblet til pinne PB4). Denne skal LED task kontrollere.  Det finnes også en trykk knapp med designasjon BUTTON(koblet til pinne PA10).  Denne skal Button task lese av.
 
 ## Lage Et Nytt Prosjekt
 - Åpne opp STM32CubeIDE
@@ -24,21 +31,23 @@ Koble Nucleo kortet til din pc med medfølgende USB kabel. På kortet er en grø
 - Under Boards List, så vil vårt utviklingskort dukke opp.  Velg dette og trykk ```Next``` knappen.
 - Du vil nå få et vindu opp med ønsket project parametere.  Skriv inn ```blinky_rtos``` som projekt navn og la resten være med defaults. Trykk ```Finish``` knappen.
 - STM32CubeIDE vil nå laste ned nødvendige filer og lage prosjektet ditt.
-- I IDEen, så vil du bli presentert med en grafisk representasjon av blinky_rtos.ios filen, som er filen man spesifiserer microcontrollerens hardware ressurser man ønsker å bruke i prosjektet. Siden vi har valgt et allerede kjent utviklingskort, så kan man se at pinnene på mikrokontrolleren er allerede satt opp.
-- Legg merke til pinne ```PA5```, som har fått et alias navn ```LED_GREEN```. Denne skal vi bruke til LED tasken vår.
-- Legg merke til pinne ```PC13```, som har fått et alias navn ```SYS_WKUP2```.  Denne skal vi bruke til Button tasken vår. Venstre klikk på denne pinnen og velg så ```GPIO_Input```. Høyre klikk på denne pinnen og velg ```Enter User Label``` og skriv så ```USR_BTN```. MERK: Tidligere versjoner av STM32Cube SDK har definert denne pinnen som ```USR_BTN``` fra før, så bare dobbelsjekk at den er definert som en ```GPIO_Input```.
-- Ekspander ```System Core``` og underkategorien ```GPIO```. Klikk på ```PC13``` og velg ```pull-up``` under ```Confguration```.
+- I IDEen, så vil du bli presentert med en grafisk representasjon av blinky_rtos.ios filen, som er filen man spesifiserer microcontrollerens hardware ressurser man ønsker å bruke i prosjektet. Siden vi har valgt et allerede kjent utviklingskort, så kan man se at noen av pinnene på mikrokontrolleren er allerede satt opp.
+- Velg pinne ```PB4```. Gi denne et alias navn ved å høyre klikke på pinnen og velg 'Enter User Label'. Skriv inn ```LED_BLUE```. Venstre klikk på pinnen og velg ```GPIO_Output``` som funksjon for denne pinnen.  Denne skal vi bruke til LED tasken vår.
+- Velg pinne ```PA10```. Gi denne et alias navn ved å høyre klikke på pinnen og velg 'Enter User Label'. Skriv inn ```BUTTON```. Venstre klikk på pinnen og velg ```GPIO_Input``` som funksjon for denne pinnen.  Denne skal vi bruke til Button tasken vår.
+- Ekspander ```System Core``` og underkategorien ```GPIO```. Klikk på ```PA10``` og velg ```pull-down``` under ```Configuration```.
 - Ekspander ```Middleware``` folderen til venstre og velg ```FREERTOS```.
 - I ```FREERTOS Mode and Configuration``` menyen, så velger du ```CMSIS_V1``` i drop-down boksen.
-- Under ```Configuration``` seksjonen, så legger du til 2 tasks med ```Add``` knappen. Egenskapene du skal fylle inn kan du se i skjermbildet under. Lag så en Queue med tilhørende ```Add``` knapp, egenskapene du skal fylle inn ser du i skjermbildet under.
+- Under ```Configuration``` seksjonen og ```Tasks and Queues``` taben,  så legger du til 2 tasks med ```Add``` knappen. Egenskapene du skal fylle inn kan du se i skjermbildet under. Lag så en ```Queue``` med tilhørende ```Add``` knapp, egenskapene du skal fylle inn ser du i skjermbildet under.
 
 ![RTOS Config](./rtos_config.jpg)
 
+- Under ```Advanced settings``` taben i samme seksjon, så setter du feltet ```USE_NEWLIB_REENTRANT``` til ```Enabled```. Hvis vi ikke gjør dette, så vil verktøyet begynne å klage litt under kode genereringen.
 - Under ```System Core``` menyen på venstre siden, velg så ```SYS``` kategorien. Finn ```Time Base Source``` settingen og sett denne til ```TIM6```.  Se skjermbilde under for hvordan dette ser ut.  Dette steget gjøres fordi RTOS bruker en timer i controlleren for å holde styr på tiden som går under navnet SYSTICK.  HAL bibliotekene bruker i utgangspunktet også SYSTICK timeren, men dette endrer vi i dette steget til TIM6 timeren. Nå slipper RTOS og HAL funskjonene å gå i beina på hverandre!
 
 ![Time Base Setup](./sys_setup_rtos.jpg)
 
-- Under ```Project Explorer``` på venstre siden, ekspander ```Core``` folderen og så ```Src``` folderen. Du vil nå finne ```main.c``` filen, dobbelklikk på denne. Det er mulig du får en advarsel om ```USE_NEWLIB_REENTRANT```, ignorer denne for denne øvelsen.
+- Lagre endringene som har blitt gjort(ctrl s). Verktøyet vil nå spørre deg om den skal generere kode. Svar ja til dette. 
+- Under ```Project Explorer``` på venstre siden, ekspander ```Core``` folderen og så ```Src``` folderen. Du vil nå finne ```main.c``` filen, dobbelklikk på denne. Det er mulig du får en advarsel om ```USE_NEWLIB_REENTRANT```. Hvis det er tilfellet, så dobbelsjekk at du fikk gjort steget med å enable ```USE_NEWLIB_REENTRANT``` i tidligere steg.
 - Sjekk at prosjektet kompilerer ved å velge meny tittelen ```Project``` og så videre ```Build All```.
 - Hvis det går bra, så er du klar til å legge til litt kode!  Finn følgende seksjoner under i ```main.c``` filen og kopier inn kode som spesifisert.
 
@@ -59,6 +68,7 @@ Legg til følgende kode:
 /* USER CODE END PM */
 ```
 
+Finn denne seksjonen:
 ```Button Task```
 ```cpp
 ...
@@ -75,7 +85,7 @@ void vButtonTask(void const * argument)
 }
 ```
 
-Legg til følgende kode:
+Legg til følgende kode for denne seksjonen:
 
 ```cpp
 ...
@@ -90,7 +100,7 @@ void vButtonTask(void const * argument)
   for(;;)
   {
     osDelay(100);
-    curr_data = HAL_GPIO_ReadPin(USR_BTN_GPIO_Port, USR_BTN_Pin);
+    curr_data = HAL_GPIO_ReadPin(BUTTON_GPIO_Port, BUTTON_Pin);
 
     if (curr_data == GPIO_PIN_RESET && prev_data == GPIO_PIN_SET)
       osMessagePut(myEventQueueHandle, (uint32_t) BUTTON_PUSH_EVENT, 5);
@@ -104,6 +114,7 @@ void vButtonTask(void const * argument)
 }
 ```
 
+Finn denne seksjonen:
 ```Led Task```
 ```cpp
 ...
@@ -144,10 +155,10 @@ void vLedTask(void const * argument)
       curr_data = (uint8_t) event.value.v;
 
       if (curr_data == BUTTON_PUSH_EVENT)
-        HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_SET);
 
       if (curr_data == BUTTON_RELEASE_EVENT)
-        HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_RESET);
     }
   }
   /* USER CODE END vLedTask */
@@ -156,5 +167,5 @@ void vLedTask(void const * argument)
 - Sjekk at prosjektet kompilerer ved å velge meny tittelen ```Project``` og så videre ```Build All```.
 - Hvis alt er ok, så kan du nå velge meny tittelen ```Run``` og så videre ```Run```. En pop up kan dukke opp med valg av debug konfigurasjon, aksepter defaults og gå videre.
 - I noen tilfeller så vil miljøet spørre om du ønsker å oppdatere firmware på debuggeren som sitter på utviklingskortet, si ja til dette.
-- Når prosessen er ferdig, så lastes din kode opp til kortet.  Du vil nå se at LED4 på kortet blinke av og på avhengig av når du trykker inn eller slipper knappen!
+- Når prosessen er ferdig, så lastes din kode opp til kortet.  Du vil nå se at BLUE LED på ekspansjonskortet blinke av og på avhengig av når du trykker inn eller slipper BUTTON knappen!
 - Gratulerer, du har nå laget et enkelt prosjekt med et sanntids operativ system for en STM32 mikrokontroller!  Dette kan være et spennende utganspunkt for å lage mere komplekse prosjektet med for eksempel en oppgave som implementerer en tilstandsmaskin basert på sensor verdier som puttes inn i en kø fra en oppgave som leser sensorer. 

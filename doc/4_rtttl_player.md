@@ -3,27 +3,14 @@
 ## Oversikt
 I denne leksjonen skal du lære hvordan du kan lage en artig [RTTTL](https://en.wikipedia.org/wiki/Ring_Tone_Text_Transfer_Language) player ved å bruke alt du har lært i de tidligere leksjonene pluss en del nytt vi skal gå igjennom i denne leksjonen. 
 
-Vi skal benytte oss av 3 RTOS tasks(oppgaver).  Vi skal gjenbruke oppgavene fra forrige øvelse, dvs knapp og led oppgavene.  Den tredje oppgaven skal vi lage nå og den vil spille en sang ved å sette forskjellige telle verdier på en timer.  Utgangen på timeren vil generere firkantpulser med varierende duty cycle som vil generere forskjellige toner på piezo elementet som vi kobler til.  Gøy!
+Vi skal benytte oss av 3 RTOS tasks(oppgaver).  Vi skal gjenbruke oppgavene fra forrige øvelse, dvs knapp og led oppgavene.  Den tredje oppgaven skal vi lage nå og den vil spille en sang ved å sette forskjellige telle verdier på en timer.  Utgangen på timeren vil generere firkantpulser med varierende duty cycle som vil generere forskjellige toner på piezo elementet som finnes på ekspansjonskortet.  Gøy!
 
-Et vanlig oppsett når man utvikler i RTOS er at hver task har sin egen input queue som de titter på for nye ting oppgaven skal gjøre.  I denne oppgaven så følger vi dette med at led og player taskene har hver sin queue, hvor button task vil legge til meldinger i disse for hvert knappetrykk.
+Et vanlig oppsett når man utvikler i RTOS er at hver task har sin egen input queue som de titter på for nye ting oppgaven skal gjøre. I denne oppgaven så følger vi dette med at led og player taskene har hver sin queue, hvor button task vil legge til meldinger i disse for hvert knappetrykk.
 
 Let's get going!
 
 ## Hardware Setup
-Koble Nucleo kortet til din pc med medfølgende USB kabel. Koble utviklingskortet til piezo elementet med den 3 tråds ledningen som anvist på tegningene under.
-
-Overview
-![Piezo Hook Up Overview](./piezo_overview.jpg)
-
-Closeup
-![Piezo Hook up Closeup](./piezo_closeup.jpg)
-
-### Koblingstabell
-| Pinne, Utviklerkort | Pinne, Piezo | Signal |
-|---------------------|--------------|--------|
-|          20         |      GND     |   GND  |
-|          16         |      VCC     |  3.3V  |
-|          1          |      I/O     |   I/O  |
+Koble Nucleo kortet med ekspansjonskortet montert til din pc med medfølgende USB kabel.
 
 ## Lage Et Nytt Prosjekt
 - Åpne opp STM32CubeIDE
@@ -31,10 +18,11 @@ Closeup
 - Finn og velg ```blinky_rtos.ios``` filen fra forrige øvelse.
 - Du vil nå få et vindu opp med ønsket project parametere.  Skriv inn ```rtttl-rtos``` som projekt navn og la resten være med defaults. Trykk ```Finish``` knappen.
 - STM32CubeIDE vil nå laste ned nødvendige filer og lage prosjektet ditt.
-- Det er mulig IDEen vil gi deg en warning, klikk på at du vil fortsatt generere kode.
+- Det er mulig IDEen vil gi deg en advarsel, klikk på at du vil fortsatt generere kode.
 - I IDEen, så vil du bli presentert med en grafisk representasjon av rtttl_rtos.ios filen, som er filen man spesifiserer microcontrollerens hardware ressurser man ønsker å bruke i prosjektet. Siden vi har valgt et allerede kjent utviklingskort, så kan man se at pinnene på mikrokontrolleren er allerede satt opp.
-- Venstre klikk på PC10 pinnen. Velg ```TIM1_CH3 ```.  Her spesifiserer vi at vi ønsker å bruke denne pinnen som en utgang fra hardware timeren TIM1 og utgang 3 fra denne. Du vil se at denne skifter farge til gul, dette fordi vi ikke har konfigurert timeren enda.
-- På venstre side, ekspander ```Timers ``` dropdown og velg ```TIM1```. På ```Channel3```, velg ```PWM Generation CH3```.  Sjekk bilde under for verifikasjon. Under ```Configuration``` seksjonen, påse at PWM Mode 1 er valgt for ```PWM Generation Channel 3```.
+- Venstre klikk på ```PB3``` pinnen. Velg ```TIM1_CH2 ```.  Her spesifiserer vi at vi ønsker å bruke denne pinnen som en utgang fra hardware timeren TIM1 og utgang 2 fra denne. Du vil se at denne skifter farge til gul, dette fordi vi ikke har konfigurert timeren enda.
+- Høyre klikk på ```PB3``` pinnen og velg ```Enter User Label```. Skirv inn navnet ```PIEZO_PWM```.
+- På venstre side, ekspander ```Timers ``` dropdown og velg ```TIM1```. På ```Channel2```, velg ```PWM Generation CH2```.  Sjekk bilde under for verifikasjon. Under ```Configuration``` seksjonen, påse at PWM Mode 1 er valgt for ```PWM Generation Channel 2```.
 
 ![TIM1 setup](./timer_setup.jpg)
 
@@ -47,6 +35,7 @@ Closeup
 
 ![RTOS Config Player](./sys_setup_rtos_player.jpg)
 
+- Sjekk at ```USE_NEWLIB_REENTRANT``` er fortsatt satt til ```Enabled``` under ```Advanced Settings```.
 - Under ```Project Explorer``` på venstre siden, ekspander ```Core``` folderen og så ```Src``` folderen. Du vil nå finne ```main.c``` filen, dobbelklikk på denne. IDEen vil nok spørre om du vil generere kode først, si ja til dette.
 - Sjekk at prosjektet kompilerer ved å velge meny tittelen ```Project``` og så videre ```Build All```.
 - Hvis det går bra, så er du klar til å legge til litt mere kode!  Finn følgende seksjoner under i ```main.c``` filen og kopier inn kode som spesifisert.
@@ -120,7 +109,7 @@ Legg til følgende kode:
 ...
 /* USER CODE BEGIN 2 */
 rtttl_info.tim_ref = &htim1;
-rtttl_info.tim_channel = TIM_CHANNEL_3;
+rtttl_info.tim_channel = TIM_CHANNEL_2;
 /* USER CODE END 2 */
 
 ```
@@ -140,7 +129,7 @@ void vButtonTask(void const *argument) {
   /* Infinite loop */
   for (;;) {
     osDelay(100);
-    curr_data = HAL_GPIO_ReadPin(USR_BTN_GPIO_Port, USR_BTN_Pin);
+    curr_data = HAL_GPIO_ReadPin(BUTTON_GPIO_Port, BUTTON_Pin);
 
     if (curr_data == GPIO_PIN_RESET && prev_data == GPIO_PIN_SET) {
       osMessagePut(myLedEventQueueHandle, (uint32_t) BUTTON_PUSH_EVENT, 0);
@@ -179,10 +168,10 @@ void vLedTask(void const *argument) {
       curr_data = (uint8_t) event.value.v;
 
       if (curr_data == BUTTON_PUSH_EVENT)
-        HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_SET);
 
       if (curr_data == BUTTON_RELEASE_EVENT)
-        HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_RESET);
     }
   }
   /* USER CODE END vLedTask */
@@ -233,5 +222,5 @@ void vPlayerTask(void const *argument) {
 - Sjekk at prosjektet kompilerer ved å velge meny tittelen ```Project``` og så videre ```Build All```.
 - Hvis alt er ok, så kan du nå velge meny tittelen ```Run``` og så videre ```Run```. En pop up kan dukke opp med valg av debug konfigurasjon, aksepter defaults og gå videre.
 - I noen tilfeller så vil miljøet spørre om du ønsker å oppdatere firmware på debuggeren som sitter på utviklingskortet. Si ja til dette.
-- Når prosessen er ferdig, så lastes din kode opp til kortet.  Du vil nå se at LD4/LED GREEN på kortet blinke av og på avhengig av når du trykker inn eller slipper knappen. Du vil også høre en sang spille hvis alt er riktig kodet og koblet opp! Ved å trykke inn knappen igjen, så vil avspillingen avsluttes. 
+- Når prosessen er ferdig, så lastes din kode opp til kortet.  Du vil nå se at LED_BLUE på kortet blinke av og på avhengig av når du trykker inn eller slipper knappen. Du vil også høre en sang spille hvis alt er riktig kodet og koblet opp! Ved å trykke inn knappen igjen, så vil avspillingen avsluttes. 
 - Gratulerer, du har nå laget et enkelt prosjekt med et sanntids operativ system for en STM32 mikrokontroller som spiller musikk!

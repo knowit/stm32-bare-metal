@@ -9,6 +9,8 @@ STM32CubeIDE består av et komplett miljø for å kunne drive med kode genererin
 ## Hardware
 Vi skal benytte oss av en enhet som heter en microcontroller i denne workshoppen. En microcontroller er kort fortalt en liten datamaskin integrert i en chip som inneholder alle komponenter(cpu, program minne, data minne og perifere input/output kretser) en trenger for å lagre og kjøre programmer og kommunisere med omverdenen.  Det finnes mange merker og typer og nå om dagen er kanskje AVR, ARM og ESP32 baserte microcontrollere de mest kjente. ARM er litt interessant siden arkitekturen er utviklet av et selskap som heter ARM og chip produsenter kan så lisensiere dette designet for å lage sine microcontrollere.  Microchip, NXP, Samsung, Apple og ST Electronics er noen av disse og i denne workshopen skal vi benytte oss en ARM basert microcontroller laget av ST Electronics.
 
+Et ekspansjonskort har også blitt laget for å forenkle uttesting av forskjellige typer funksjonalitet som en del av denne workshoppen.
+
 ## Software
 STM32CubeIDE software har en lagvis tilnærming til software utviklingen.  
 

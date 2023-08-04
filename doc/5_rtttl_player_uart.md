@@ -26,9 +26,12 @@ Vi gjenbruker samme oppsett som i leksjon 4.
 
 - Ekspander ```Middleware``` folderen til venstre og velg ```FREERTOS```.
 
-- Under ```Configuration``` seksjonen, så legger du til en ```Task``` med ```Add``` knappen i tillegg til de andre taskene vi definerte i forrige oppgave. Egenskapene du skal fylle inn kan du se i skjermbildet under.
+- Vi må justere stack reservasjonen til alle taskene for å få nok minne til applikasjonen. Under ```Configuration``` seksjonen, klikk på ```Config Parameters``` og endre verdien til ```MINIMAL_STACK_SIZE``` til 64.
+
+- Under ```Configuration``` seksjonen, så legger du til en ```Task``` med ```Add``` knappen i tillegg til de andre taskene vi definerte i forrige oppgave. Egenskapene du skal fylle inn kan du se i skjermbildet under. Husk å oppdatere stack size til led og button oppgavene til 64, slik bildet viser.
 
 ![Rtos_Uart_Task](./rtos_uart_task.jpg)
+
 
 - Under ```Project Explorer``` på venstre siden, ekspander ```Core``` folderen og så ```Src``` folderen. Du vil nå finne ```main.c``` filen, dobbelklikk på denne. IDEen vil nok spørre om du vil generere kode først, si ja til dette.
 - Sjekk at prosjektet kompilerer ved å velge meny tittelen ```Project``` og så videre ```Build All```.
@@ -114,7 +117,7 @@ Legg til følgende kode:
 ...
 /* USER CODE BEGIN 2 */
 rtttl_info.tim_ref = &htim1;
-rtttl_info.tim_channel = TIM_CHANNEL_3;
+rtttl_info.tim_channel = TIM_CHANNEL_2;
 // Initiate uart rx with interrupt
 HAL_UART_Receive_IT(&huart2, (uint8_t *)aRxBuffer, 1);
 /* USER CODE END 2 */
@@ -188,7 +191,7 @@ void vButtonTask(void const *argument) {
   /* Infinite loop */
   for (;;) {
     osDelay(100);
-    curr_data = HAL_GPIO_ReadPin(USR_BTN_GPIO_Port, USR_BTN_Pin);
+    curr_data = HAL_GPIO_ReadPin(BUTTON_GPIO_Port, BUTTON_Pin);
 
     if (curr_data == GPIO_PIN_RESET && prev_data == GPIO_PIN_SET) {
 			osMessagePut(myLedEventQueueHandle, (uint32_t) BUTTON_PUSH_EVENT, 0);
@@ -280,8 +283,8 @@ void vUartRxTask(void const * argument)
 - Sjekk at prosjektet kompilerer ved å velge meny tittelen ```Project``` og så videre ```Build All```.
 - Hvis alt er ok, så kan du nå velge meny tittelen ```Run``` og så videre ```Run```. En pop up kan dukke opp med valg av debug konfigurasjon, aksepter defaults og gå videre.
 - I noen tilfeller så vil miljøet spørre om du ønsker å oppdatere firmware på debuggeren som sitter på utviklingskortet. Si ja til dette.
-- Når prosessen er ferdig, så lastes din kode opp til kortet.  Du vil nå se at LD4/LED GREEN på kortet blinke av og på avhengig av når du trykker inn eller slipper knappen. Du vil også høre en sang spille hvis alt er riktig kodet og koblet opp! Ved å trykke inn knappen igjen, så vil avspillingen avsluttes.
-- Start opp en serie port terminal, som for eksempel ```Termite``` for Windows eller ```CoolTerm``` for andre platformer.
+- Når prosessen er ferdig, så lastes din kode opp til kortet.  Du vil nå se at LED BLUE på kortet blinke av og på avhengig av når du trykker inn eller slipper knappen. Du vil også høre en sang spille hvis alt er riktig kodet og koblet opp! Ved å trykke inn knappen igjen, så vil avspillingen avsluttes.
+- Start opp en serie port terminal, som for eksempel ```Termite``` for Windows eller ```CoolTerm``` for andre platformer. Velg 115200 som baud rate.
 - Send over følgende tekst over serieporten, det kan være enklere å skru på makro funksjonen i terminal programmet og programmere en F tast til å inneholde denne strengen.
 
 ```

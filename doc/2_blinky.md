@@ -8,6 +8,8 @@ Koble Nucleo kortet til din pc med medfølgende USB kabel. På kortet er en grø
 
 ![Nucleo](./dev_board.jpg)
 
+Ekspansjonskortet brukes ikke i denne øvelsen og skal ikke plugges inn enda.
+
 ## Lage Et Nytt Prosjekt
 - Åpne opp STM32CubeIDE
 - Velg ```Start new STM32 project```
