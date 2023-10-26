@@ -1,0 +1,15 @@
+#include "sidplayer.h"
+#include "fake6502.h"
+#include "resid.h"
+#include "ram6502.h"
+
+#include "comic.h"
+#include "commando.h"
+#include "ik.h"
+#include "mikie.h"
+#include "ocean.h"
+#include "rambo.h"
+#include "wizball.h"
+#include "yie.h"
+
+// #include "filter6581.h"

@@ -4,12 +4,12 @@ A repo which contains the material for a bare metal programming workshop on stm3
 # STM32 Bare Metal Programmering med STM32CubeIDE
 
 ## Om kurset
-Dette kurset er ment som en introduksjon til STM32 ARM baserte microcontrollere og hvordan man kan gjøre utvikling på disse ved å bruke STM32CubeIDE miljøet. Dette er et mer proffesjonelt miljø enn for eksempel Arduino og man har tilgang til full hardware debugging med tracing og breakpoints. En av de fine fordelene med dette miljøet er at den har et grafisk konfigurasjons grensesnitt som gjør det enkelt å sette opp hardware ressursene visuelt og så lage all nødvendig skjelett kode som kan brukes direkte i kode prosjektet ditt.
+Dette kurset er ment som en introduksjon til STM32 ARM baserte microcontrollere og hvordan man kan gjøre utvikling på disse ved å bruke STM32CubeIDE miljøet. Dette er et mer profesjonelt miljø enn for eksempel Arduino og man har tilgang til full hardware debugging med tracing og breakpoints. En av de fine fordelene med dette miljøet er at den har et grafisk konfigurasjons grensesnitt som gjør det enkelt å sette opp hardware ressursene visuelt og så lage all nødvendig skjelett kode som kan brukes direkte i kode prosjektet ditt.
 
 ## Utstyr
 For å delta trenger du en datamaskin med en USB-A-kontakt. Kurset har blitt testet på Windows/macOS, men skal i teorien fungere på alle operativsystemer.
 
-Som en del av kurset, så vil du få låne et [utviklingskort](https://www.st.com/en/evaluation-tools/nucleo-g0b1re.html), en micro USB kabel, tre ledninger med hunkjønnkontakter i hver ende og en piezo basert høytalermodul.
+Som en del av kurset, så vil du få låne et [utviklingskort](https://www.st.com/en/evaluation-tools/nucleo-g0b1re.html) og et eget designet ekspansjonskort med knapper, led og en piezo basert høytalermodul. Noen kort har også en 3.5mm hodetelefonkontakt som kan drives av en PWM utgang fra mikrokontrolleren.  Denne funksjonaliteten utforskes ikke som en del av denne workshoppen i utgangspunktet, men er en bonus leksjon som er inkludert hvis du ønsker å teste ut denne funksjonaliteten.
 
 Utviklingskortet er fra ST Electronics og heter Nucleo-64 STM32G0B1 og er basert på en STM32G0B1 microcontroller. Denne består av en Arm Cortex M0+ kjerne med 512KB Flash(program minne) og 128KB SRAM(arbeidsminne). Mere informasjon om microcontrolleren kan du finne [her](https://www.st.com/en/microcontrollers-microprocessors/stm32g0b1vc.html).
 
@@ -41,3 +41,4 @@ Du er nå klar til å begynne første leksjon!
 - [3. Blinky RTOS](./doc/3_blinky_rtos.md)
 - [4. RTTTL Player](./doc/4_rtttl_player.md)
 - [5. RTTTL Player UART](./doc/5_rtttl_player_uart.md)
+- [6. Bonus: PlatformIO og SID spiller](./doc/6_platformio_audio.md)
