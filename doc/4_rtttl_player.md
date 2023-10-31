@@ -21,7 +21,7 @@ Koble Nucleo kortet med ekspansjonskortet montert til din pc med medfølgende US
 - Det er mulig IDEen vil gi deg en advarsel, klikk på at du vil fortsatt generere kode.
 - I IDEen, så vil du bli presentert med en grafisk representasjon av rtttl_rtos.ios filen, som er filen man spesifiserer microcontrollerens hardware ressurser man ønsker å bruke i prosjektet. Siden vi har valgt et allerede kjent utviklingskort, så kan man se at pinnene på mikrokontrolleren er allerede satt opp.
 - Venstre klikk på ```PB3``` pinnen. Velg ```TIM1_CH2 ```.  Her spesifiserer vi at vi ønsker å bruke denne pinnen som en utgang fra hardware timeren TIM1 og utgang 2 fra denne. Du vil se at denne skifter farge til gul, dette fordi vi ikke har konfigurert timeren enda.
-- Høyre klikk på ```PB3``` pinnen og velg ```Enter User Label```. Skirv inn navnet ```PIEZO_PWM```.
+- Høyre klikk på ```PB3``` pinnen og velg ```Enter User Label```. Skriv inn navnet ```PIEZO_PWM```.
 - På venstre side, ekspander ```Timers ``` dropdown og velg ```TIM1```. På ```Channel2```, velg ```PWM Generation CH2```.  Sjekk bilde under for verifikasjon. Under ```Configuration``` seksjonen, påse at PWM Mode 1 er valgt for ```PWM Generation Channel 2```.
 
 ![TIM1 setup](./timer_setup.jpg)

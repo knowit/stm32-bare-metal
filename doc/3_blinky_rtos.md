@@ -32,8 +32,8 @@ Koble Nucleo kortet til din pc med medfølgende USB kabel. På ekspansjonskortet
 - Du vil nå få et vindu opp med ønsket project parametere.  Skriv inn ```blinky_rtos``` som projekt navn og la resten være med defaults. Trykk ```Finish``` knappen.
 - STM32CubeIDE vil nå laste ned nødvendige filer og lage prosjektet ditt.
 - I IDEen, så vil du bli presentert med en grafisk representasjon av blinky_rtos.ios filen, som er filen man spesifiserer microcontrollerens hardware ressurser man ønsker å bruke i prosjektet. Siden vi har valgt et allerede kjent utviklingskort, så kan man se at noen av pinnene på mikrokontrolleren er allerede satt opp.
-- Velg pinne ```PB4```. Gi denne et alias navn ved å høyre klikke på pinnen og velg 'Enter User Label'. Skriv inn ```LED_BLUE```. Venstre klikk på pinnen og velg ```GPIO_Output``` som funksjon for denne pinnen.  Denne skal vi bruke til LED tasken vår.
-- Velg pinne ```PA10```. Gi denne et alias navn ved å høyre klikke på pinnen og velg 'Enter User Label'. Skriv inn ```BUTTON```. Venstre klikk på pinnen og velg ```GPIO_Input``` som funksjon for denne pinnen.  Denne skal vi bruke til Button tasken vår.
+- Velg pinne ```PB4```. Venstre klikk på pinnen og velg ```GPIO_Output``` som funksjon for denne pinnen. Gi denne et alias navn ved å høyre klikke på pinnen og velg 'Enter User Label'. Skriv inn ```LED_BLUE```. Denne skal vi bruke til LED tasken vår.
+- Velg pinne ```PA10```. Venstre klikk på pinnen og velg ```GPIO_Input``` som funksjon for denne pinnen. Gi denne et alias navn ved å høyre klikke på pinnen og velg 'Enter User Label'. Skriv inn ```BUTTON```.   Denne skal vi bruke til Button tasken vår.
 - Ekspander ```System Core``` og underkategorien ```GPIO```. Klikk på ```PA10``` og velg ```pull-down``` under ```Configuration```.
 - Ekspander ```Middleware``` folderen til venstre og velg ```FREERTOS```.
 - I ```FREERTOS Mode and Configuration``` menyen, så velger du ```CMSIS_V1``` i drop-down boksen.
